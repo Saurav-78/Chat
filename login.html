@@ -1,0 +1,59 @@
+<html>
+    <head>
+<style>
+    body{
+        display:flex;
+        flex-direction:column;
+        align-items: center;
+        margin-top: 50px;
+        justify-content: center;
+    }
+    input,button{
+        padding:10px;
+        margin:10px;
+        width:200px
+    }
+    button{
+        background-color: aquamarine;
+        color:aliceblue;
+        border:none;
+        border-radius:5px ;
+    }
+</style>
+    </head>
+    <body>
+        <h1>Log in</h1>
+        <input type = "text" id = "username" placeholder = "enter username"/>
+        <input type = "password" id = "password" placeholder = "enter password"/>
+        <button onclick="login()">Log in</button>
+        <p>New user?<a href = "signup.html">Sign up.</a></p>
+        <h3>Jwt token</h3>
+        <textarea id = "tokenDisplay" rows = "4" readonly></textarea>
+        <script>
+            async function login(){
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const res = await fetch('/user/login', {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({username,password})
+
+                });
+                const data = await res.json();
+             if (res.ok){
+                localStorage.setItem('accesstoken', data.accessToken);
+                 localStorage.setItem('refreshtoken', data.refreshToken);
+                localStorage.setItem('username', username);
+                document.getElementById('tokenDisplay').value = data.accessToken;
+                alert('Log in succsesfull and Jwt created id displayed below.');
+                window.location.href = '/index.html'
+             }
+              else{
+                alert('Log in failed '+token);
+              }
+            }
+            
+
+        </script>
+    </body>
+</html>

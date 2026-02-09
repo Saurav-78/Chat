@@ -1,0 +1,92 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: blue;
+            text-align: center;
+        }
+        h1{
+            font-size: 30px;
+            font-weight: bold;
+            color: aquamarine;
+        }
+        form{
+            display:flex;
+            flex-direction:column;
+            align-items: center;
+        }
+        input {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 1.25rem;
+            padding: 0.5rem;
+            width: 250px;
+        }
+        button {
+            background-color: #3b82f6; /* Tailwind's blue-500 */
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            margin-top: 1.25rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2563eb; /* darker blue */
+        }
+        #messageArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+<h1 id = "h1">
+Chat
+</h1>
+<form id = 'form'>
+    <input type = "text" placeholder = "name" id = "name"/>
+    <input type = "text" placeholder = "message" id = "message"/>
+    <button type = "submit">send</button>
+    <button type = "delete">delete</button>
+
+</form>
+<div id = "messageArea"></div>
+<script src = "/socket.io/socket.io.js">
+</script>
+<script>
+    let socket = io();
+    let form = document.getElementById('form');
+    let name = document.getElementById('name');
+    let message = document.getElementById('message');
+    let messageArea = document.getElementById('messageArea');
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        if (message.value){
+            socket.emit('send name', name.value);
+            socket.emit('send message', message.value);
+            message.value = "";
+
+        }
+    });
+    socket.on("send name", (username)=>{
+        let name = document.createElement("p");
+        name.style.backgroundColor = "grey";
+        name.style.color = "white";
+        name.style.textAlign = "center";
+        name.style.width = "100%";
+        name.textContent = username + ":";
+        messageArea.appendChild(name);
+    
+    });
+    socket.on("send message", (chat)=>{
+        let chatContent = document.createElement("p");
+        chatContent.textContent = chat;
+        messageArea.appendChild(chatContent);
+    })
+</script>
+
+</body>
+</html>
