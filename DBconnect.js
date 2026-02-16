@@ -1,6 +1,5 @@
-//mongodb+srv://sauravpandit024_db_user:WhdB932LFIppgd3k@cluster0.j1yu1ic.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 const mongoose = require('mongoose');
-const url = "mongodb+srv://sauravpandit024_db_user:WhdB932LFIppgd3k@cluster0.j1yu1ic.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const url = process.env.MONGO_URI;
 const connect = async()=>{
      try{
           await mongoose.connect(url);
